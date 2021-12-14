@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+.idea
+.gradle
+gradle
+gradlew
+gradlew.bat
+build
+#environment
+.env
 # dependencies
 /node_modules
 /.pnp

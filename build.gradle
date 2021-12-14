@@ -1,0 +1,20 @@
+plugins{
+    id 'base'
+    id "com.github.node-gradle.node" version "3.1.1"
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+wrapper{
+    gradleVersion='7.1'
+}
+
+node{
+    workDir = file("${rootDir}/.gradle/nodejs")
+    nodeProxySettings = ProxySettings.SMART
+}
+
+

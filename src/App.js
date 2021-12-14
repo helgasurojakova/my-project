@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import Counter from "./counter";
 import {useState} from "react";
+import {Checkbox, HStack} from "@chakra-ui/react";
+import MaterialFile from "./materialFile";
 
 function App() {
 
@@ -30,7 +32,18 @@ const [count,setCount] = useState(0)
         </a>
         {count}
         <Counter/>
-
+        <HStack spacing={10} direction='row'>
+          <Checkbox size='sm' colorScheme='red'>
+            Checkbox
+          </Checkbox>
+          <Checkbox size='md' colorScheme='green' defaultIsChecked>
+            Checkbox
+          </Checkbox>
+          <Checkbox size='lg' colorScheme='orange' defaultIsChecked>
+            Checkbox
+          </Checkbox>
+        </HStack>
+        <MaterialFile/>
       </header>
     </div>
   );
