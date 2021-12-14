@@ -16,6 +16,7 @@ const [count,setCount] = useState(0)
   return (
     <div className="App">
       <header className="App-header">
+        <p><b>{process.env.REACT_APP_MY_ENV}</b>  WORLD!</p>
         <button onClick={() => setCount(count + 1)}>increment</button>
         <button disabled={dis} onClick={decrement}>decrement</button>
         <img src={logo} className="App-logo" alt="logo" />
