@@ -1,52 +1,60 @@
-import React, {useRef, useState} from "react";
-import ClassCounter from "./components/ClassCounter";
+import React, {useMemo, useRef, useState} from "react";
 import '../src/styles/App.css'
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
+import PostForm from "./components/PostForm";
+import MySelect from "./components/UI/select/MySelect";
 import MyInput from "./components/UI/input/MyInput";
+import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/MyModal/MyModal";
+import MyButton from "./components/UI/button/MyButton";
+
 function App() {
     const [posts, setPosts] = useState([
-        {id: 1, title: 'JavaScript 1', body: 'Description'},
-        {id: 2, title: 'JavaScript 2', body: 'Description'},
-        {id: 3, title: 'JavaScript 3', body: 'Description'},
+        {id: 1, title: 'Aaa 1', body: 'Description3'},
+        {id: 2, title: 'Bbb 2', body: 'Description2'},
+        {id: 3, title: 'Ccc 3', body: 'Description1'},
     ])
 
-    const [posts2, setPosts2] = useState([
-        {id: 1, title: 'Python 1', body: 'Description'},
-        {id: 2, title: 'Python 2', body: 'Description'},
-        {id: 3, title: 'Python 3', body: 'Description'},
-    ])
+    const [filter, setFilter] = useState({sort: '', query: ''})
+    const [modal, setModal] = useState(false)
 
-    const [title, setTitle] = useState('')
-    const bodyInputRef = useRef();
-    const addNewPost = (e) => {
-        e.preventDefault()
-        console.log(title)
-        console.log(bodyInputRef.current.value)
+    const sortedPosts = useMemo(() => {
+        console.log('YEES')
+        if(filter.sort) {
+            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
+        }
+        return posts;
+    }, [filter.sort, posts])
+
+    const sortedAndSearchedPosts = useMemo(() => {
+        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query))
+    },[filter.query, sortedPosts])
+
+    const createPost = (newPost) => {
+        setPosts([...posts, newPost])
+        setModal(false)
     }
 
-  return (
-    <div className="App">
-        <form>
-            {/*Управляемый компонент*/}
-            <MyInput
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                type="text"
-                placeholder="Название поста"
+    const removePost = (post) => {
+        setPosts(posts.filter(p => p.id !== post.id))
+    }
+
+    return (
+        <div className="App">
+            <MyButton style={{marginTop: 30}} onClick={() => setModal(true)}>
+                Создать пост
+            </MyButton>
+            <MyModal visible={modal} setVisible={setModal}>
+                <PostForm create={createPost}/>
+            </MyModal>
+            <hr style={{margin: '15px 0'}}/>
+            <PostFilter
+                filter={filter}
+                setFilter={setFilter}
             />
-            {/*Неуправляемый компонент*/}
-            <MyInput
-                ref={bodyInputRef}
-                type="text"
-                placeholder="Содержание поста"
-            />
-            <MyButton onClick={addNewPost}>Создать пост</MyButton>
-        </form>
-        <PostList posts={posts} title="Список постов 1"/>
-        <PostList posts={posts2} title="Список постов 2"/>
-    </div>
-  );
+            <PostList remove={removePost} posts={sortedAndSearchedPosts} title="Список постов"/>
+        </div>
+    );
 }
 
 export default App;
